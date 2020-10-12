@@ -1,0 +1,243 @@
+import numpy as np
+import sys
+import pygame
+from pygame.draw import *
+from random import *
+pygame.init()
+
+FPS = 30
+screen = pygame.display.set_mode((900, 900))
+
+
+running = True
+
+DarkOliveGreen = (63,62,0)
+Black = (0,0,0)
+DarkGray = (40,40,40)
+Tan = (172, 147, 98)
+Maroon = (50, 25, 0)
+Gold = (210, 210, 0)
+White = (255,255,255)
+Gainsboro = (220,220,220)
+LightGrey = (211,211,211)
+DeepSkyBlue = (0,220,255)
+
+
+
+#background
+rect(screen,(150,150,150),(0, 0, 900, 350))
+#moon
+circle(screen,White,(800,100),80)
+#clouds no blur
+ellipse(screen,DarkGray,(50,100,720,100))
+pygame.draw.ellipse(screen,(120,120,120),(400,50,500,100))
+
+
+k = int(1)
+l = int(1)
+kl = int(1)
+
+def dom(x,y):
+    rect(screen, DarkOliveGreen,(50*k + x, 200*l + y, 200*k, 250*l))
+    polygon(screen, Black,[(25*k + x, 200*l + y), (35*k + x, 180*l + y), (240*k + 25*k + x ,180*l + y), (250*k + 25*k + x,200*l + y)])
+    rect(screen, DarkGray,(75*k + x, 140*l + y, 5*k, 52*l))
+    rect(screen, DarkGray,(250*k + x, 140*l + y, 5*k, 52*l))
+    rect(screen, DarkGray,(85*k + x, 130*l + y, 12*k, 65*l))
+    rect(screen, DarkGray,(200*k + x, 160*l + y, 5*k, 20*l))
+    rect(screen, Tan, (70*k + x,200*l + y, 20*k, 100*l))
+    rect(screen, Tan, (120*k + x,200*l + y, 20*k, 100*l))
+    rect(screen, Tan, (175*k + x,200*l + y, 20*k, 100*l))
+    rect(screen, Tan, (220*k + x,200*l + y, 20*k, 100*l))
+    rect(screen, DarkGray, (25*k + x, 300*l + y, 250*k,40*l))
+    rect(screen, DarkGray, (65*k + x, 265*l + y, 10*k, 35*l))
+    rect(screen, DarkGray, (105*k + x, 265*l + y, 10*k, 35*l))
+    rect(screen, DarkGray, (145*k + x, 265*l + y, 10*k, 35*l))
+    rect(screen, DarkGray, (185*k + x, 265*l + y, 10*k, 35*l))
+    rect(screen, DarkGray, (225*k + x, 265*l + y, 10*k, 35*l))
+    rect(screen, DarkGray, (30*k + 12*k + x, 255*l + y, 220*k, 20*l))
+    rect(screen, DarkGray, (32*k + x, 275*l + y, 10*k, 25*l))
+    rect(screen, DarkGray, (260*k + x, 275*l + y, 10*k, 25*l))
+    rect(screen, Maroon, (60*k + x, 375*l + y, 50*k, 50*l))
+    rect(screen, Maroon, (120*k + x, 375*l + y, 50*k, 50*l))
+    rect(screen, Maroon, (190*k + x, 375*l + y, 50*k, 50*l))
+    
+dom(300,100)
+dom(630, 10)
+
+#blured clouds
+surf1 = pygame.Surface((500, 100))
+pygame.draw.ellipse(surf1,DarkGray,(0, 0, 500, 100))
+surf1.set_colorkey(Black)
+surf1.set_alpha(200)
+screen.blit(surf1, (400, 250))
+
+surf2 = pygame.Surface((700,100))
+pygame.draw.ellipse(surf2,(120,120,120),(0,0,700,100))
+surf2.set_colorkey((0,0,0))
+surf2.set_alpha(120)
+screen.blit(surf2, (150,400))
+
+surf3 = pygame.Surface((500,100))
+pygame.draw.ellipse(surf3,(120,120,120),(0,0,500,100))
+surf3.set_colorkey(Black)
+surf3.set_alpha(120)
+screen.blit(surf3, (450,450))
+
+surf4 = pygame.Surface((500,90))
+pygame.draw.ellipse(surf4,(120,120,120),(0,0,500,90))
+surf4.set_colorkey(Black)
+surf4.set_alpha(120)
+screen.blit(surf4, (-100,500))
+
+dom(20, 180)
+
+
+
+def prividen(x,y):
+    ghost = pygame.Surface((300,500))
+    priv_left = [0] * 60
+    priv_right = [0] * 50
+    priv_bottom = [0] * 110
+    circle(ghost,LightGrey,(100, 50),20)
+    pygame.draw.ellipse(ghost,LightGrey,(100 * k, 50 * l,20 * k,20 * l))
+    for i in range(60):
+        priv_left[i] = [round(100 - 20 * 0.71) - i , 50 + 50 - 0.02*(-i + 50) ** 2]
+    for i in range(110):
+        priv_bottom[i] = [round(100 - 74.2) + i, 50 + 40 + 12.7 + 5 * (np.sin((i - (5/10) * np.pi)/10) + np.sin((i - (5/10) * np.pi)/5))]
+    for i in range(50):
+        priv_right[i] = [100 + 46 - i, 50 + 49.26 + 0.02 * (-i + 50) ** 2 - 50]
+    polygon(ghost,LightGrey,priv_left + priv_bottom + priv_right)
+    
+    circle(ghost,DeepSkyBlue,(100 - 10, 50 - 5),6)
+    circle(ghost,DeepSkyBlue,(100 + 10, 50 - 7),6)
+    circle(ghost,Black,(100 - 12,50 - 5),2)
+    circle(ghost,Black, (100 + 8, 50 - 7),2)
+    
+    el1 = pygame.Surface((20,20))
+    pygame.draw.ellipse(el1,White,(0,2,6,2))
+    el2 = pygame.transform.rotate(el1,30)
+    el2.set_colorkey(Black)
+    ghost.blit(el2,(100 - 12, 50 - 17))
+
+    el3 = pygame.Surface((20,20))
+    pygame.draw.ellipse(el3,White,(0,2,6,2))
+    el4 = pygame.transform.rotate(el3,30)
+    el4.set_colorkey(Black)
+    ghost.blit(el4,(100 + 8, 50 - 19))
+
+    ghost.set_colorkey(Black)
+    ghost.set_alpha(220)
+    screen.blit(ghost, (x,y))
+    
+prividen(520,320)
+prividen(550,360)
+
+
+
+
+# big ghost from last program
+
+
+priv1 = [0] * 150
+priv2 = [0] * 100
+privsin1 = [0] * 160
+privsin2 = [0] * 140
+for i in range(150):
+    priv1[i] = [500 + i, 700 - 0.05 * (i/3 + 5) ** 2]
+for i in range(100):
+    priv2[i] = [698 + i, 531 + 0.01 * i ** 2]
+
+circle(screen, Gainsboro,(round(650 + 30 * 0.61), round(549 - 30 * 0.61)),40)
+priv3 = [round(650 + 30 * 0.61) + 30, round(549 - 30 * 0.61)]
+priv = priv1 + priv2
+polygon(screen, Gainsboro, priv)
+#1 part of bottom of ghost
+for i in range(160):
+    privsin1[i] = [ i, 100 + 10 * np.sin((i - 0.5 * np.pi)/20)]
+crek1 = pygame.Surface((160,500))
+polygon(crek1, Gainsboro, privsin1 +[[130,0]])
+crek2 = pygame.transform.rotate(crek1, -5)
+crek2.set_colorkey(Black)
+screen.blit(crek2, (500, 590))
+#second part of bottom of a ghost
+crek3 = pygame.Surface((160,300))
+for i in range(140):
+    privsin2[i] = [i, 100 + 10 * np.sin((i - 0.5 * np.pi)/20)]
+polygon  (crek3, Gainsboro,[[50,0]] + privsin2 + [[130,50]] )
+crek4 = pygame.transform.rotate(crek3, 35)
+crek4.set_colorkey(Black)
+screen.blit(crek4,(630,542))
+#eyes
+circle(screen,DeepSkyBlue,(round(650 + 30 * 0.61)-20,round(549 - 30 * 0.61) - 5),10)
+circle(screen,DeepSkyBlue,(round(650 + 30 * 0.61)+20,round(549 - 30 * 0.61) - 10),10)
+circle(screen,Black,(round(650 + 30 * 0.61)-20-3,round(549 - 30 * 0.61) - 5),2)
+circle(screen,Black,(round(650 + 30 * 0.61)+20 - 3,round(549 - 30 * 0.61) - 10),2)
+
+eli1 = pygame.Surface((50,50))
+pygame.draw.ellipse(eli1,White,(0,3,10,4))
+eli2 = pygame.transform.rotate(eli1,30)
+eli2.set_colorkey(Black)
+screen.blit(eli2,((round(650 + 30 * 0.61)-20-3,round(549 - 30 * 0.61) - 35)))
+
+eli3 = pygame.Surface((50,50))
+pygame.draw.ellipse(eli3,White,(0,3,10,4))
+eli4 = pygame.transform.rotate(eli3,30)
+eli4.set_colorkey(Black)
+screen.blit(eli4,((round(650 + 30 * 0.61)+20-3,round(549 - 30 * 0.61) - 40)))
+
+
+
+prividen(500,550)
+
+# inverted ghosts
+
+def privideninv (x,y):
+    ghost = pygame.Surface((300,500))
+    priv1 = [0] * 60
+    priv2 = [0] * 50
+    priv3 = [0] * 110
+    circle(ghost,LightGrey,(100, 50),20)
+    for i in range(60):
+        priv1[i]=[round(100 - 20 * 0.71) - i , 50 + 50 - 0.02*(-i + 50) ** 2]
+    for i in range(110):
+        priv3[i] = [round(100 - 74.2) + i, 50 + 40 + 12.7 + 5 * (np.sin((i - 0.5 * np.pi)/10) + np.sin((i - 0.5 * np.pi)/5))]
+    for i in range(50):
+        priv2[i] = [100 + 46 - i, 50 + 49.26 + 0.02 * (-i + 50) ** 2 - 50]
+    polygon(ghost,LightGrey,priv1 + priv3 + priv2)
+    
+    circle(ghost,DeepSkyBlue,(100 - 10, 50 - 5),6)
+    circle(ghost,DeepSkyBlue,(100 + 10, 50 - 7),6)
+    circle(ghost,Black,(100 - 12,50 - 5),2)
+    circle(ghost,Black, (100 + 8, 50 - 7),2)
+    
+    el1 = pygame.Surface((20,20))
+    pygame.draw.ellipse(el1,White,(0,2,6,2))
+    el2 = pygame.transform.rotate(el1,30)
+    el2.set_colorkey(Black)
+    ghost.blit(el2,(100 - 12, 50 - 17))
+
+    el3 = pygame.Surface((20,20))
+    pygame.draw.ellipse(el3,White,(0,2,6,2))
+    el4 = pygame.transform.rotate(el3,30)
+    el4.set_colorkey(Black)
+    ghost.blit(el4,(100 + 8, 50 - 19))
+
+    ghostinv = pygame.transform.flip(ghost,True, False)
+    ghostinv.set_colorkey(Black)
+    ghostinv.set_alpha(220)
+    screen.blit(ghostinv, (x,y))
+    
+privideninv(20,550)    
+privideninv(30, 600)
+
+
+
+
+
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+    pygame.display.update()
