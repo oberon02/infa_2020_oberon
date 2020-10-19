@@ -18,12 +18,10 @@ BLACK = (0, 0, 0)
 COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
 
 
-
-def new_ball(x,y,Vx,Vy,r):
+def new_ball(x,y,Vx,Vy,r,color):
     '''global new__ball'''
 
     new__ball = pygame.Surface((2*r,2*r))
-    color = COLORS[randint(0, 5)]
     circle(new__ball, color, (r, r), r)
     new__ball.set_colorkey(BLACK)
     new__ball.set_alpha(255)
@@ -70,6 +68,11 @@ r2 = randint(7, 70)
 k = 0
 m = 0
 c = 0
+u = int(0)
+g = int(0)
+color2 = COLORS[0]
+color = COLORS[0]
+
 while not finished:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -81,10 +84,18 @@ while not finished:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if ((event.pos[0] - x)*(event.pos[0] - x) + (event.pos[1] - y)*(event.pos[1] - y)) <= r*r:
                 score += 1
+                g += 1
+                if g == 6:
+                    g = 0
+                color = COLORS[g]
             elif x1<=event.pos[0]<=x1+dx1 and y1<=event.pos[1]<=y1+dy1:
                 score += 8
             elif ((event.pos[0] - x2)*(event.pos[0] - x2) + (event.pos[1] - y2)*(event.pos[1] - y2)) <= r2*r2:
                 score += 8
+                u += 1
+                if u == 6:
+                    u = 0
+                color2 = COLORS[u]
             else:
                 misses += 1
                     
@@ -96,15 +107,17 @@ while not finished:
         Vy = randint(9, 12)
         r = randint(10, 100)
         k = 0
+        color = COLORS[0]
         
     m += 1
-    if m == 60:
+    if m == 66:
         x2 = randint(100, 1100)
         y2 = randint(100, 900)
         Vx2 = randint(14, 20)
         Vy2 = randint(14, 20)
         r2 = randint(7, 70)
         m = 0
+        color2 = COLORS[0]
     
     c += 1
     if c == 20:
@@ -116,11 +129,12 @@ while not finished:
         Vy1 = randint(1, 2) 
         c = 0
         
-    new_ball(x,y,Vx,Vy,r)
+    new_ball(x,y,Vx,Vy,r,color)
     x += Vx 
     y += Vy
     
-    new_ball(x2,y2,Vx2,Vy2,r2)
+    
+    new_ball(x2,y2,Vx2,Vy2,r2,color2)
     x2 += Vx2 
     y2 += Vy2
     
